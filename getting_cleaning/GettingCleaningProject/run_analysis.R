@@ -23,18 +23,21 @@ process_files <- function(tableFP,labelsFP,subjectFP){
   mutate(cleaned_table, activity = factors, subject = subjects)
 }
 
-get_averages <- function(dt){
+getAverages <- function(dt){
   act_sum <- group_by(dt, activity) %>% summarise_each(funs(mean)) %>% select(-subject,-activity)
   subj_sum <- group_by(dt, subject) %>% summarise_each(funs(mean)) %>% select(-subject,-activity)
   merge(act_sum, subj_sum)
 }
 
-run1 <- function(){
+getSummary <- function(){
   training <- process_files("train/X_train.txt","train/y_train.txt","train/subject_train.txt")
   testing <- process_files("test/X_test.txt","test/y_test.txt","test/subject_test.txt")
   final <- merge(training,testing, all=TRUE)
 }
 
-run2 <- function(final){
-  secondSet <- get_averages(final)
+run <- function(){
+  sum <- getSummary()
+  avg <- getAverages(sum)
+  write.table(sum, "summary.csv")
+  write.table(avg, "averages.csv")
 }
