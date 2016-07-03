@@ -26,7 +26,7 @@ process_files <- function(tableFP,labelsFP,subjectFP){
 getAverages <- function(dt){
   act_sum <- group_by(dt, activity) %>% summarise_each(funs(mean)) %>% select(-subject,-activity)
   subj_sum <- group_by(dt, subject) %>% summarise_each(funs(mean)) %>% select(-subject,-activity)
-  merge(act_sum, subj_sum)
+  merge(act_sum, subj_sum, all=TRUE)
 }
 
 getSummary <- function(){
@@ -39,5 +39,5 @@ run <- function(){
   sum <- getSummary()
   avg <- getAverages(sum)
   write.table(sum, "summary.csv")
-  write.table(avg, "averages.csv")
+  write.table(avg, "averages.csv", row.names = FALSE)
 }
